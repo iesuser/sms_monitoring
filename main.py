@@ -1,5 +1,14 @@
 # ფუნქცია ფაილში ჩაწერილ ტელეფონის ნომრებსა და მეილებს გადაიტანს ლისტებში და დააბრუნებს მათ.
 # filename_p არის ტელეფონის ნომრების ფაილის მისამართი, ხოლო filename_m არის მეილების.
+import requests
+import os
+from dotenv import load_dotenv
+
+from ies_mail_sender import send_mail
+from ies_sms_sender import send_sms
+
+load_dotenv()
+
 def get_numbers_and_mails(filename_p,filename_m):
     with open(filename_p,'r') as f:
         f = f.read().strip()
@@ -14,8 +23,6 @@ def get_numbers_and_mails(filename_p,filename_m):
 
 # ფუნქცია გააგზავნის შეტყობინებებს მეილებსა და ტელეფონის ნომრებზე.
 def send_warnings(message):
-    from ies_mail_sender import send_mail
-    from ies_sms_sender import send_sms
 
     numbers, emails = get_numbers_and_mails('phone_numbers.txt','emails.txt')
     subject = "ყურადღება!"
@@ -24,11 +31,6 @@ def send_warnings(message):
     send_sms(message=message, numbers=numbers)
 
 def check_if_magti_url_is_alive():
-    import requests
-    import os
-    from dotenv import load_dotenv
-
-    load_dotenv()
     magti_url = os.getenv('MAGTI_URL')
 
     try:
